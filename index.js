@@ -1,14 +1,15 @@
-const fs = require("fs");
+import _ from "lodash";
+// Функция normalize(), которая "нормализует" данные переданного урока
 
-//Функция getJsonFileData, которая возвращает объект, соответствующий JSON из файла example.json
-const getJsonFileData = () => {
-  const obj = { files: ["src/objects.js"], config: true };
+const normalize = (obj) => {
+  obj.name = _.capitalize(obj.name);
+  obj.description = obj.description.toLowerCase();
   return obj;
 };
 
-const actual = getJsonFileData();
-const fileContent = fs.readFileSync("./example.json", "utf-8");
-const expected = JSON.parse(fileContent);
+const lesson = {
+  name: "ДеструКТУРИЗАЦИЯ",
+  description: "каК удивитЬ друзей",
+};
 
-console.log(expected);
-console.log(actual);
+console.log(normalize(lesson));
