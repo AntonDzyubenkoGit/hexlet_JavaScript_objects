@@ -1,48 +1,59 @@
 import path from "node:path";
 import _ from "lodash";
 
-// Функция getDomainInfo(), которая принимает на вход имя сайта и возвращает информацию о нем
+// Функция countWords(), которая считает количество слов в предложении, и возвращает объект
 
-const site1 = "yandex.ru";
-const site2 = "https://hexlet.io";
-const site3 = "http://google.com";
+const countWords = (coll) => {
+  if (coll.length === 0) {
+    return {};
+  }
+
+  const words = coll.toLowerCase().split(" ");
+  const result = {};
+
+  for (const item of words) {
+    result[item] = (result[item] ?? 0) + 1;
+  }
+
+  return result;
+};
 
 // Вариант с lodash
-const getDomainInfo = (site) => {
-  if (!site.startsWith("http")) {
-    site = site.replace(site, `http://${site}`);
+const countWords2 = (coll) => {
+  if (coll.length === 0) {
+    return {};
   }
 
-  const parts = site.split("://");
-  const scheme = parts[0];
-  const name = _.last(parts);
+  const words = _.words(coll.toLowerCase());
+  const result = {};
 
-  const filepath = { scheme, name };
-
-  return filepath;
-};
-
-// Вариант с node:path
-const getDomainInfo2 = (site) => {
-  if (!site.startsWith("http")) {
-    site = site.replace(site, `http://${site}`);
-  }
-  return { scheme: path.dirname(site), name: path.basename(site) };
-};
-
-// Вариант штатными средствами
-const getDomainInfo3 = (site) => {
-  let sheme = "";
-
-  if (site.startsWith("https://")) {
-    sheme = "https://";
-  } else {
-    sheme = "http://";
+  for (const item of words) {
+    result[item] = (result[item] ?? 0) + 1;
   }
 
-  const name = site.replace(sheme, "");
-
-  return { sheme, name };
+  return result;
 };
 
-console.log(getDomainInfo3(site3));
+// Вариант с hasOwn
+const countWords3 = (coll) => {
+  if (coll.length === 0) {
+    return {};
+  }
+
+  const words = _.words(coll.toLowerCase());
+  const result = {};
+
+  for (const item of words) {
+    if (Object.hasOwn(result, item)) {
+      result[item] += 1;
+    } else {
+      result[item] = 1;
+    }
+  }
+  return result;
+};
+
+const text1 = "one two three two ONE one wow";
+const text2 = "another one sentence with strange Words words";
+
+console.log(countWords3(''));
