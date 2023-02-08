@@ -1,59 +1,44 @@
 import path from "node:path";
-import _ from "lodash";
+import _  from "lodash";
 
-// Функция countWords(), которая считает количество слов в предложении, и возвращает объект
-
-const countWords = (coll) => {
-  if (coll.length === 0) {
-    return {};
-  }
-
-  const words = coll.toLowerCase().split(" ");
-  const result = {};
-
-  for (const item of words) {
-    result[item] = (result[item] ?? 0) + 1;
-  }
-
-  return result;
+const data = {
+  user: "ubuntu",
+  cores: 4,
+  os: "linux",
 };
 
-// Вариант с lodash
-const countWords2 = (coll) => {
-  if (coll.length === 0) {
-    return {};
-  }
+// Функция pick(), которая формирует из переданного объекта другой объект, включающий только указанные свойства
 
-  const words = _.words(coll.toLowerCase());
+const pick = (obj, properties) => {
   const result = {};
+  const entries = Object.entries(obj);
 
-  for (const item of words) {
-    result[item] = (result[item] ?? 0) + 1;
-  }
-
-  return result;
-};
-
-// Вариант с hasOwn
-const countWords3 = (coll) => {
-  if (coll.length === 0) {
-    return {};
-  }
-
-  const words = _.words(coll.toLowerCase());
-  const result = {};
-
-  for (const item of words) {
-    if (Object.hasOwn(result, item)) {
-      result[item] += 1;
-    } else {
-      result[item] = 1;
+  for (const [key, value] of entries) {
+    for (const prop of properties) {
+      if (key === prop) {
+        result[key] = value;
+      }
     }
   }
   return result;
 };
 
-const text1 = "one two three two ONE one wow";
-const text2 = "another one sentence with strange Words words";
+// Вариант с lodash
+const pick2 = (data, keys) => {
+  return _.pick(data, keys);
+};
 
-console.log(countWords3(''));
+// Вариант с hasOwn
+const pick3 = (data, keys) => {
+  const result = {};
+
+  for (const key of keys) {
+    if (Object.hasOwn(data, key)) {
+      result[key] = data[key];
+    }
+  }
+
+  return result;
+};
+
+console.log(pick3(data, ["user", "cores"]));
