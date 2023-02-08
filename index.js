@@ -1,25 +1,48 @@
-// Функция is(), которая сравнивает объекты по совпадению данных, а не по ссылкам
+import path from "node:path";
+import _ from "lodash";
 
-const is = (company1, company2) => {
-  const keys = ["name", "state", "website"];
+// Функция getDomainInfo(), которая принимает на вход имя сайта и возвращает информацию о нем
 
-  for (const key of keys) {
-    if (company1[key] !== company2[key]) {
-      return false;
-    }
+const site1 = "yandex.ru";
+const site2 = "https://hexlet.io";
+const site3 = "http://google.com";
+
+// Вариант с lodash
+const getDomainInfo = (site) => {
+  if (!site.startsWith("http")) {
+    site = site.replace(site, `http://${site}`);
   }
-  return true;
+
+  const parts = site.split("://");
+  const scheme = parts[0];
+  const name = _.last(parts);
+
+  const filepath = { scheme, name };
+
+  return filepath;
 };
 
-const company1 = {
-  name: "Hexlet",
-  state: "published",
-  website: "https://hexlet.io",
-};
-const company2 = {
-  name: "Hexlet",
-  state: "published",
-  website: "https://hexlet.io",
+// Вариант с node:path
+const getDomainInfo2 = (site) => {
+  if (!site.startsWith("http")) {
+    site = site.replace(site, `http://${site}`);
+  }
+  return { scheme: path.dirname(site), name: path.basename(site) };
 };
 
-console.log(is(company1, company2));
+// Вариант штатными средствами
+const getDomainInfo3 = (site) => {
+  let sheme = "";
+
+  if (site.startsWith("https://")) {
+    sheme = "https://";
+  } else {
+    sheme = "http://";
+  }
+
+  const name = site.replace(sheme, "");
+
+  return { sheme, name };
+};
+
+console.log(getDomainInfo3(site3));
