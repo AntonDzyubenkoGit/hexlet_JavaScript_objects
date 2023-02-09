@@ -1,44 +1,48 @@
 import path from "node:path";
-import _  from "lodash";
+import _ from "lodash";
 
+// Функция get(), которая извлекает из объекта любой глубины вложенности значение по указанным ключам.
 const data = {
   user: "ubuntu",
-  cores: 4,
-  os: "linux",
+  hosts: {
+    0: {
+      name: "web1",
+    },
+    1: {
+      name: "web2",
+      null: 3,
+      active: false,
+      company: {
+        name: "hexlet",
+      },
+    },
+  },
 };
 
-// Функция pick(), которая формирует из переданного объекта другой объект, включающий только указанные свойства
+const get = (obj, keys) => {
+  let current = obj;
 
-const pick = (obj, properties) => {
-  const result = {};
-  const entries = Object.entries(obj);
-
-  for (const [key, value] of entries) {
-    for (const prop of properties) {
-      if (key === prop) {
-        result[key] = value;
-      }
+  for (let i = 0; i < keys.length; i++) {
+    if (Object.hasOwn(current, keys[i])) {
+      current = current[keys[i]];
+    } else {
+      return null;
     }
   }
-  return result;
+  return current;
 };
 
-// Вариант с lodash
-const pick2 = (data, keys) => {
-  return _.pick(data, keys);
-};
-
-// Вариант с hasOwn
-const pick3 = (data, keys) => {
-  const result = {};
+const get2 = (obj, keys) => {
+  let current = obj;
 
   for (const key of keys) {
-    if (Object.hasOwn(data, key)) {
-      result[key] = data[key];
+    if (!Object.hasOwn(current, key)) {
+      return null;
+    } else {
+      current = current[key];
     }
   }
-
-  return result;
+  return current;
 };
 
-console.log(pick3(data, ["user", "cores"]));
+console.log(get2(data, ["hosts", 0, "name"]));
