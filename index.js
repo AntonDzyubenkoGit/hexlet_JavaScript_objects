@@ -1,10 +1,21 @@
 import path from "node:path";
 import _ from "lodash";
 
-// Функция make(),  которая создает объект компании и возвращает его.
+// Функция getSortedNames(), которая принимает на вход список пользователей, извлекает их имена, сортирует в алфавитном порядке и возвращает отсортированный список имен.
 
-const make = (company, data) => {
-  return { company, state: "moderating", createdAt: Date.now(), ...data };
+const getSortedNames = (data) => {
+  const result = [];
+  for (const { name } of data) {
+    result.push(name);
+  }
+  return result.sort();
 };
 
-console.log(make("Hexlet", { website: "hexlet.io", state: "published" }));
+const users = [
+  { name: "Bronn", gender: "male", birthday: "1973-03-23" },
+  { name: "Zeigar", gender: "male", birthday: "1973-11-03" },
+  { name: "Aiegon", gender: "male", birthday: "1963-11-03" },
+  { name: "Cansa", gender: "female", birthday: "2012-11-03" },
+];
+
+console.log(getSortedNames(users));
