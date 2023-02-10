@@ -1,25 +1,10 @@
 import path from "node:path";
 import _ from "lodash";
 
-// Функция cloneShallow (), которая выполняет поверхностное копирование объектов.
+// Функция make(),  которая создает объект компании и возвращает его.
 
-const data = {
-  key: "value",
-  key2: {
-    key: "innerValue",
-    innerKey: {
-      anotherKey: "anotherValue",
-    },
-  },
+const make = (company, data) => {
+  return { company, state: "moderating", createdAt: Date.now(), ...data };
 };
 
-const cloneShallow = (obj) => {
-  const result = {};
-  const entries = Object.entries(obj);
-  for (const [key, value] of entries) {
-    result[key] = value;
-  }
-  return result;
-};
-
-console.log(cloneShallow(data));
+console.log(make("Hexlet", { website: "hexlet.io", state: "published" }));
