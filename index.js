@@ -1,48 +1,37 @@
 import path from "node:path";
 import _ from "lodash";
 
-// Функция get(), которая извлекает из объекта любой глубины вложенности значение по указанным ключам.
+// Функция fill(), которая заполняет объект данными из другого объекта по разрешенному списку ключей.
+
+const company = {
+  name: "testdrive",
+  state: "moderating",
+  age: 48,
+};
+
 const data = {
-  user: "ubuntu",
-  hosts: {
-    0: {
-      name: "web1",
-    },
-    1: {
-      name: "web2",
-      null: 3,
-      active: false,
-      company: {
-        name: "hexlet",
-      },
-    },
-  },
+  name: "Hexlet",
+  state: "published",
+  age: 12,
 };
 
-const get = (obj, keys) => {
-  let current = obj;
+const fill = (object, keys, data) => {
+  const lengthOfProperties = keys.length;
 
-  for (let i = 0; i < keys.length; i++) {
-    if (Object.hasOwn(current, keys[i])) {
-      current = current[keys[i]];
-    } else {
-      return null;
-    }
+  if (lengthOfProperties === 0) {
+    return Object.assign(object, keys);
   }
-  return current;
+
+  const pick = _.pick(data, keys);
+  const result = Object.assign(object, pick);
+
+  return result;
 };
 
-const get2 = (obj, keys) => {
-  let current = obj;
-
-  for (const key of keys) {
-    if (!Object.hasOwn(current, key)) {
-      return null;
-    } else {
-      current = current[key];
-    }
-  }
-  return current;
+// Версия в две строки
+const fill2 = (object, keys, data) => {
+  const pickFilter = keys.length > 0 ? _.pick(data, keys) : data;
+  return Object.assign(object, pickFilter);
 };
 
-console.log(get2(data, ["hosts", 0, "name"]));
+console.log(fill2(company, ["name", "state", "age"], data));
