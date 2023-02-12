@@ -1,21 +1,35 @@
-import path from "node:path";
-import _ from "lodash";
+// Испытания. Javascript: Представление массива в виде объекта
 
-// Функция getSortedNames(), которая принимает на вход список пользователей, извлекает их имена, сортирует в алфавитном порядке и возвращает отсортированный список имен.
-
-const getSortedNames = (data) => {
-  const result = [];
-  for (const { name } of data) {
-    result.push(name);
-  }
-  return result.sort();
-};
-
-const users = [
-  { name: "Bronn", gender: "male", birthday: "1973-03-23" },
-  { name: "Zeigar", gender: "male", birthday: "1973-11-03" },
-  { name: "Aiegon", gender: "male", birthday: "1963-11-03" },
-  { name: "Cansa", gender: "female", birthday: "2012-11-03" },
+const test = [
+  ["cat", 5],
+  ["dog", 6],
+  ["cat", 11],
 ];
 
-console.log(getSortedNames(users));
+const test2 = [
+  ["fred", 30],
+  ["barney", 40],
+];
+
+// Вариант через цикл for..of..
+
+const fromPairs = (array) => {
+  const result = {};
+
+  for (const [key, value] of array) {
+    result[key] = value;
+  }
+
+  return result;
+};
+
+// Вариант через Object.fromEntries()
+
+const fromPairs2 = (coll) => {
+  const result = Object.fromEntries(coll);
+  return result;
+};
+
+
+
+console.log(fromPairs2(test));
