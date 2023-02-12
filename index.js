@@ -1,18 +1,18 @@
-// Испытания. Javascript: Преобразование DNA в RNA
-const DNK = { A: "U", C: "G", G: "C", T: "A" };
+// Испытания. Javascript: Сборщик строки запроса
 
-const dnaToRna = (dnk) => {
-  const rnk = [];
-  const dnkKey = Object.keys(DNK);
+const buildQueryString = (data) => {
+  const currentData = Object.entries(data).sort();
+  const result = [];
 
-  for (const key of dnk) {
-    if (!dnkKey.includes(key)) {
-      return null;
-    }
-    rnk.push(DNK[key]);
+  for (const arr of currentData) {
+    result.push(arr.join("="));
   }
 
-  return rnk.join('');
+  return result.join("&");
 };
 
-console.log(dnaToRna("ACGTGGTCTTAA")); //GGAU
+const test = { per: 10, page: 1 };
+const test2 = { param: "all", param1: true };
+const test3 = { a: 10, s: "Wow", d: 3.2, z: "89" };
+
+console.log(buildQueryString(test3));
