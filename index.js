@@ -1,35 +1,18 @@
-// Испытания. Javascript: Представление массива в виде объекта
+// Испытания. Javascript: Преобразование DNA в RNA
+const DNK = { A: "U", C: "G", G: "C", T: "A" };
 
-const test = [
-  ["cat", 5],
-  ["dog", 6],
-  ["cat", 11],
-];
+const dnaToRna = (dnk) => {
+  const rnk = [];
+  const dnkKey = Object.keys(DNK);
 
-const test2 = [
-  ["fred", 30],
-  ["barney", 40],
-];
-
-// Вариант через цикл for..of..
-
-const fromPairs = (array) => {
-  const result = {};
-
-  for (const [key, value] of array) {
-    result[key] = value;
+  for (const key of dnk) {
+    if (!dnkKey.includes(key)) {
+      return null;
+    }
+    rnk.push(DNK[key]);
   }
 
-  return result;
+  return rnk.join('');
 };
 
-// Вариант через Object.fromEntries()
-
-const fromPairs2 = (coll) => {
-  const result = Object.fromEntries(coll);
-  return result;
-};
-
-
-
-console.log(fromPairs2(test));
+console.log(dnaToRna("ACGTGGTCTTAA")); //GGAU
