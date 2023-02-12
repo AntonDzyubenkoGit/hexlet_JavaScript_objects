@@ -1,51 +1,61 @@
 import _ from "lodash";
 
-// Испытания. Javascript: Скрэббл
+const obj1 = { one: "eon", two: "two", four: true };
+const obj2 = { two: "own", zero: 4, four: true };
 
-const scrabble = (coll, word) => {
-  const charsColl = coll.toLowerCase().split("");
-  const charsWord = word.toLowerCase().split("");
+// Испытания. Javascript: Вычислитель различий
 
-  const countColl = {};
-  const countWord = {};
+const genDiff = (objectOne, objectTwo) => {
+  const entriesOne = Object.entries(objectOne);
+  const entriesTwo = Object.entries(objectTwo);
 
-  for (const char of charsColl) {
-    countColl[char] = (countColl[char] ?? 0) + 1;
-  }
+  const result = {};
 
-  for (const char of charsWord) {
-    countWord[char] = (countWord[char] ?? 0) + 1;
-  }
-
-  const keys = Object.keys(countWord);
-
-  for (const key of keys) {
-    if (!Object.hasOwn(countColl, key)) {
-      return false;
-    } else {
-      if (!(countColl[key] >= countWord[key])) {
-        return false;
+  if (entriesOne.length !== 0) {
+    for (const [key, value] of entriesOne) {
+      if (!Object.hasOwn(objectTwo, key)) {
+        result[key] = "deleted";
+      }
+      for (const [key2, value2] of entriesTwo) {
+        if (Object.hasOwn(objectOne, key2) && value === value2) {
+          result[key2] = "unchanged";
+        } else if (Object.hasOwn(objectOne, key2) && value !== value2) {
+          result[key2] = "changed";
+        } else if (!Object.hasOwn(objectOne, key2)) {
+          result[key2] = "added";
+        }
       }
     }
-  }
-
-  return true;
-};
-
-// Вариант с lodash
-
-const scrabble2 = (str, word) => {
-  const countChars = _.countBy(str);
-
-  for (const char of word.toLowerCase()) {
-    const count = _.get(countChars, char, 0);
-
-    if (count === 0) {
-      return false;
+  } else {
+    for (const [key2, value2] of entriesTwo) {
+      result[key2] = "added";
     }
-    countChars[char] -= 1;
   }
-  return true;
+
+  return result;
 };
 
-console.log(scrabble("jasgva", "java"));
+// Версия с lodash
+
+const genDiff2 = (data1, data2) => {
+  const keys1 = Object.keys(data1);
+  const keys2 = Object.keys(data2);
+  const keys = _.union(keys1, keys2);
+
+  const result = {};
+
+  for (const key of keys) {
+    if (!Object.hasOwn(data1, key)) {
+      result[key] = "added";
+    } else if (!!Object.hasOwn(data2, key)) {
+      result[key] = "deleted";
+    } else if (data1[key] !== data2[key]) {
+      result[key] = "changed";
+    } else {
+      result[key] = "unchanged";
+    }
+  }
+  return result;
+};
+
+console.log(genDiff2(obj1, obj2));
