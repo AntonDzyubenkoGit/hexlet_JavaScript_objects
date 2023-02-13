@@ -1,61 +1,34 @@
-import _ from "lodash";
+const collection = [
+  { title: "Book of Fooos", author: "FooBar", year: 1111 },
+  { title: "Cymbeline", author: "Shakespeare", year: 1611 },
+  { title: "The Tempest", author: "Shakespeare", year: 1611 },
+  { title: "Book of Foos Barrrs", author: "FooBar", year: 2222 },
+  { title: "Still foooing", author: "FooBar", year: 3333 },
+  { title: "Happy Foo", author: "FooBar", year: 4444 },
+];
 
-const obj1 = { one: "eon", two: "two", four: true };
-const obj2 = { two: "own", zero: 4, four: true };
+const where1 = { author: "Shakespeare", year: 1611 };
+const where2 = { author: "undefined", year: 1611 };
+const where3 = { year: 4444 };
+const where4 = { author: "Shakespeare", year: 1611, title: "The Tempest" };
 
-// Испытания. Javascript: Вычислитель различий
+// Испытания. Javascript: Детектирование
 
-const genDiff = (objectOne, objectTwo) => {
-  const entriesOne = Object.entries(objectOne);
-  const entriesTwo = Object.entries(objectTwo);
+const findWhere = (coll, data) => {
+  const keys = Object.keys(data);
 
-  const result = {};
-
-  if (entriesOne.length !== 0) {
-    for (const [key, value] of entriesOne) {
-      if (!Object.hasOwn(objectTwo, key)) {
-        result[key] = "deleted";
-      }
-      for (const [key2, value2] of entriesTwo) {
-        if (Object.hasOwn(objectOne, key2) && value === value2) {
-          result[key2] = "unchanged";
-        } else if (Object.hasOwn(objectOne, key2) && value !== value2) {
-          result[key2] = "changed";
-        } else if (!Object.hasOwn(objectOne, key2)) {
-          result[key2] = "added";
-        }
+  for (const item of coll) {
+    let swith = true;
+    for (const key of keys) {
+      if (!(key in item) || data[key] !== item[key]) {
+        swith = false;
+        break;
       }
     }
-  } else {
-    for (const [key2, value2] of entriesTwo) {
-      result[key2] = "added";
-    }
+    if (swith) return item;
   }
 
-  return result;
+  return null;
 };
 
-// Версия с lodash
-
-const genDiff2 = (data1, data2) => {
-  const keys1 = Object.keys(data1);
-  const keys2 = Object.keys(data2);
-  const keys = _.union(keys1, keys2);
-
-  const result = {};
-
-  for (const key of keys) {
-    if (!Object.hasOwn(data1, key)) {
-      result[key] = "added";
-    } else if (!!Object.hasOwn(data2, key)) {
-      result[key] = "deleted";
-    } else if (data1[key] !== data2[key]) {
-      result[key] = "changed";
-    } else {
-      result[key] = "unchanged";
-    }
-  }
-  return result;
-};
-
-console.log(genDiff2(obj1, obj2));
+console.log(findWhere(collection, where2));
